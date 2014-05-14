@@ -19,11 +19,10 @@ namespace AzureCors
             var cred = new StorageCredentials(corsConfig.AccountName, corsConfig.AccountKey);
             var storageAccount = new CloudStorageAccount(cred, true);
             var blobClient = storageAccount.CreateCloudBlobClient();
-            var serviceProperties = ConfigureCors(blobClient);
-            blobClient.SetServiceProperties(serviceProperties);
+            ConfigureCors(blobClient);
         }
 
-        private ServiceProperties ConfigureCors(CloudBlobClient blobClient)
+        private void ConfigureCors(CloudBlobClient blobClient)
         {
             var serviceProperties = new ServiceProperties
             {
@@ -33,7 +32,7 @@ namespace AzureCors
             };
 
             AddCorsRule(serviceProperties);
-            return serviceProperties;
+            blobClient.SetServiceProperties(serviceProperties);
         }
 
         private void AddCorsRule(ServiceProperties serviceProperties)
